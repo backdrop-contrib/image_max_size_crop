@@ -133,8 +133,8 @@ function image_max_size_crop_dimensions(array &$dimensions, array $data) {
  *   Dimensions to be modified - an array with components width and height, in
  *   pixels.
  * @param int $width
- *   The target width, in pixels. If this value is NULL then the cropping will be
- *   based only on the height value.
+ *   The target width, in pixels. If this value is NULL then the cropping will 
+ *   be based only on the height value.
  * @param int $height
  *   The target height, in pixels. If this value is NULL then the cropping will
  *   be based only on the width value.
@@ -143,8 +143,8 @@ function image_max_size_crop_dimensions(array &$dimensions, array $data) {
  *   TRUE if $dimensions was modified, FALSE otherwise.
  */
 function image_dimensions_max_size_crop(array &$dimensions, $width = NULL, $height = NULL) {
-  // If desired dimensions are set, check if they are larger then 
-  // image dimensions. 
+  // If desired dimensions are set, check if they are larger then
+  // image dimensions.
   $old_width = $dimensions['width'];
   $old_height = $dimensions['height'];
   if ($width && $width < $dimensions['width']) {
