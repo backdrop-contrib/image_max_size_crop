@@ -83,7 +83,7 @@ function image_max_size_crop_effect(&$image, array $data) {
   $dimensions = $image->info;
 
   // Crop the dimensions - if they don't change then just return success.
-  if (!image_dimensions_max_resize($dimensions, $data['width'], $data['height'])) {
+  if (!image_dimensions_max_size_crop($dimensions, $data['width'], $data['height'])) {
     return TRUE;
   }
   list($x, $y) = explode('-', $data['anchor']);
