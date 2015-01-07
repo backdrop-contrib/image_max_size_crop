@@ -43,7 +43,7 @@ function image_max_size_crop_theme() {
  *
  * @ingroup themeable
  */
-function theme_image_max_size_crop_summary($variables) {
+function theme_image_max_size_crop_summary(array $variables) {
   $data = $variables['data'];
 
   if ($data['width'] && $data['height']) {
@@ -68,11 +68,11 @@ function theme_image_max_size_crop_summary($variables) {
  *     of "XOFFSET-YOFFSET". XOFFSET is either a number of pixels or
  *     "left", "center", "right" and YOFFSET is either a number of pixels or
  *     "top", "center", "bottom".
- * 
- * @return
+ *
+ * @return boolean
  *   TRUE on success. FALSE on failure to resize image.
  */
-function image_max_size_crop_effect(&$image, $data) {
+function image_max_size_crop_effect(&$image, array $data) {
   // Set sane default values.
   $data += array(
     'width' => NULL,
@@ -89,18 +89,18 @@ function image_max_size_crop_effect(&$image, $data) {
   list($x, $y) = explode('-', $data['anchor']);
   $x = image_filter_keyword($x, $image->info['width'], $dimensions['width']);
   $y = image_filter_keyword($y, $image->info['height'], $dimensions['height']);
-   if (!image_toolkit_invoke('crop', $image, array($x, $y, (int) $dimensions['width'], (int) $dimensions['height']))) {
-   watchdog(
-     'image', 
-     'Image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', 
-     array(
-       '%toolkit' => $image->toolkit, 
-       '%path' => $image->source, 
-       '%mimetype' => $image->info['mime_type'], 
-       '%dimensions' => $image->info['width'] . 
-       'x' . $image->info['height'],
-     ),
-     WATCHDOG_ERROR);
+  if (!image_toolkit_invoke('crop', $image, 
+      array($x, $y, (int) $dimensions['width'], (int) $dimensions['height']))) {
+    watchdog(
+      'image', 
+      'Image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', 
+      array(
+        '%toolkit' => $image->toolkit,
+        '%path' => $image->source,
+        '%mimetype' => $image->info['mime_type'],
+        '%dimensions' => $image->info['width'] . 'x' . $image->info['height'],
+      ),
+      WATCHDOG_ERROR);
     return FALSE;
   }
   return TRUE;
