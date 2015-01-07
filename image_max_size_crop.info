@@ -1,0 +1,7 @@
+name = Image maximum size crop
+description = Crop image when larger than specified dimension(s).
+package = Media
+core = 7.x
+
+dependencies[] = image
+
