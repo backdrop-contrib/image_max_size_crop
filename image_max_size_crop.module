@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Functions needed to create an image style. 
+ * Functions needed to create an image style.
  */
 
 /**
@@ -37,7 +37,7 @@ function image_max_size_crop_theme() {
 /**
  * Returns HTML for a summary of an image crop effect.
  *
- * @param $variables
+ * @param array $variables
  *   An associative array containing:
  *   - data: The current configuration for this crop effect.
  *
@@ -57,9 +57,9 @@ function theme_image_max_size_crop_summary($variables) {
 /**
  * Image effect callback; Resize an image resource.
  *
- * @param $image
+ * @param object $image
  *   An image object returned by image_load().
- * @param $data
+ * @param array $data
  *   An array of attributes to use when performing the resize effect with the
  *   following items:
  *   - "width": An integer representing the desired width in pixels.
@@ -68,10 +68,9 @@ function theme_image_max_size_crop_summary($variables) {
  *     of "XOFFSET-YOFFSET". XOFFSET is either a number of pixels or
  *     "left", "center", "right" and YOFFSET is either a number of pixels or
  *     "top", "center", "bottom".
+ * 
  * @return
  *   TRUE on success. FALSE on failure to resize image.
- *
- * @see image_resize()
  */
 function image_max_size_crop_effect(&$image, $data) {
   // Set sane default values.
@@ -90,8 +89,18 @@ function image_max_size_crop_effect(&$image, $data) {
   list($x, $y) = explode('-', $data['anchor']);
   $x = image_filter_keyword($x, $image->info['width'], $dimensions['width']);
   $y = image_filter_keyword($y, $image->info['height'], $dimensions['height']);
-   if (!image_toolkit_invoke('crop', $image, array($x, $y, (int) $dimensions['width'], (int) $dimensions['height']))){
-    watchdog('image', 'Image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', array('%toolkit' => $image->toolkit, '%path' => $image->source, '%mimetype' => $image->info['mime_type'], '%dimensions' => $image->info['width'] . 'x' . $image->info['height']), WATCHDOG_ERROR);
+   if (!image_toolkit_invoke('crop', $image, array($x, $y, (int) $dimensions['width'], (int) $dimensions['height']))) {
+   watchdog(
+     'image', 
+     'Image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', 
+     array(
+       '%toolkit' => $image->toolkit, 
+       '%path' => $image->source, 
+       '%mimetype' => $image->info['mime_type'], 
+       '%dimensions' => $image->info['width'] . 
+       'x' . $image->info['height'],
+     ),
+     WATCHDOG_ERROR);
     return FALSE;
   }
   return TRUE;
@@ -100,10 +109,10 @@ function image_max_size_crop_effect(&$image, $data) {
 /**
  * Image dimensions callback; Resize.
  *
- * @param $dimensions
+ * @param array $dimensions
  *   Dimensions to be modified - an array with components width and height, in
  *   pixels.
- * @param $data
+ * @param array $data
  *   An array of attributes to use when performing the resize effect with the
  *   following items:
  *   - "width": An integer representing the desired width in pixels.

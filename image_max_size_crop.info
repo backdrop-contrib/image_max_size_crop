@@ -4,4 +4,3 @@ package = Media
 core = 7.x
 
 dependencies[] = image
-
