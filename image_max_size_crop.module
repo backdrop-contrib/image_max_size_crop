@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Functions needed to create image style. 
+ * Functions needed to create an image style. 
  */
 
 /**
@@ -83,7 +83,7 @@ function image_max_size_crop_effect(&$image, $data) {
 
   $dimensions = $image->info;
 
-  // Scale the dimensions - if they don't change then just return success.
+  // Crop the dimensions - if they don't change then just return success.
   if (!image_dimensions_max_resize($dimensions, $data['width'], $data['height'])) {
     return TRUE;
   }
@@ -116,7 +116,7 @@ function image_max_size_crop_dimensions(array &$dimensions, array $data) {
 }
 
 /**
- * Scales image dimensions while maintaining aspect ratio.
+ * Crop image dimensions when larger than specified dimensions. 
  *
  * The resulting dimensions can be smaller for one or both target dimensions.
  *
@@ -124,16 +124,14 @@ function image_max_size_crop_dimensions(array &$dimensions, array $data) {
  *   Dimensions to be modified - an array with components width and height, in
  *   pixels.
  * @param $width
- *   The target width, in pixels. If this value is NULL then the scaling will be
+ *   The target width, in pixels. If this value is NULL then the cropping will be
  *   based only on the height value.
  * @param $height
- *   The target height, in pixels. If this value is NULL then the scaling will
+ *   The target height, in pixels. If this value is NULL then the cropping will
  *   be based only on the width value.
  *
  * @return
  *   TRUE if $dimensions was modified, FALSE otherwise.
- *
- * @see image_scale()
  */
 function image_dimensions_max_size_crop(array &$dimensions, $width = NULL, $height = NULL) {
   //als breedte gezet en groter pas aan
@@ -180,6 +178,8 @@ function image_max_size_crop_form($data) {
     '#element_validate' => array('image_effect_integer_validate'),
     '#allow_negative' => FALSE,
   );
+  //Reuse validation function from scaling. 
+  //Ensures either width or heigth is set. 
   $form['#element_validate'] = array('image_effect_scale_validate');
 
   $form['anchor'] = array(
