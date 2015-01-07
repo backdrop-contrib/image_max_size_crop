@@ -69,7 +69,7 @@ function theme_image_max_size_crop_summary(array $variables) {
  *     "left", "center", "right" and YOFFSET is either a number of pixels or
  *     "top", "center", "bottom".
  *
- * @return boolean
+ * @return bool
  *   TRUE on success. FALSE on failure to resize image.
  */
 function image_max_size_crop_effect(&$image, array $data) {
@@ -89,11 +89,11 @@ function image_max_size_crop_effect(&$image, array $data) {
   list($x, $y) = explode('-', $data['anchor']);
   $x = image_filter_keyword($x, $image->info['width'], $dimensions['width']);
   $y = image_filter_keyword($y, $image->info['height'], $dimensions['height']);
-  if (!image_toolkit_invoke('crop', $image, 
+  if (!image_toolkit_invoke('crop', $image,
       array($x, $y, (int) $dimensions['width'], (int) $dimensions['height']))) {
     watchdog(
-      'image', 
-      'Image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', 
+      'image',
+      'Image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)',
       array(
         '%toolkit' => $image->toolkit,
         '%path' => $image->source,
@@ -125,25 +125,26 @@ function image_max_size_crop_dimensions(array &$dimensions, array $data) {
 }
 
 /**
- * Crop image dimensions when larger than specified dimensions. 
+ * Crop image dimensions when larger than specified dimensions.
  *
  * The resulting dimensions can be smaller for one or both target dimensions.
  *
- * @param $dimensions
+ * @param array $dimensions
  *   Dimensions to be modified - an array with components width and height, in
  *   pixels.
- * @param $width
+ * @param int $width
  *   The target width, in pixels. If this value is NULL then the cropping will be
  *   based only on the height value.
- * @param $height
+ * @param int $height
  *   The target height, in pixels. If this value is NULL then the cropping will
  *   be based only on the width value.
  *
- * @return
+ * @return bool
  *   TRUE if $dimensions was modified, FALSE otherwise.
  */
 function image_dimensions_max_size_crop(array &$dimensions, $width = NULL, $height = NULL) {
-  //als breedte gezet en groter pas aan
+  // If desired dimensions are set, check if they are larger then 
+  // image dimensions. 
   $old_width = $dimensions['width'];
   $old_height = $dimensions['height'];
   if ($width && $width < $dimensions['width']) {
@@ -165,10 +166,10 @@ function image_dimensions_max_size_crop(array &$dimensions, $width = NULL, $heig
  * form for configuring the resize options. Therefore it does not not need to
  * include metadata about the effect, nor a submit button.
  *
- * @param $data
+ * @param array $data
  *   The current configuration for this resize effect.
  */
-function image_max_size_crop_form($data) {
+function image_max_size_crop_form(array $data) {
   $form['width'] = array(
     '#type' => 'textfield',
     '#title' => t('Width'),
@@ -187,8 +188,8 @@ function image_max_size_crop_form($data) {
     '#element_validate' => array('image_effect_integer_validate'),
     '#allow_negative' => FALSE,
   );
-  //Reuse validation function from scaling. 
-  //Ensures either width or heigth is set. 
+  // Reuse validation function from scaling.
+  // Ensures either width or heigth is set.
   $form['#element_validate'] = array('image_effect_scale_validate');
 
   $form['anchor'] = array(
